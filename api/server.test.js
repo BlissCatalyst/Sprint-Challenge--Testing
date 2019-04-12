@@ -11,7 +11,7 @@ describe("server.js", () => {
     it("respond with 201 CREATED", async () => {
       const res = await request(server)
         .post("/games")
-        .send({ title: "game", genre: "game", releaseDate: 2000 });
+        .send({ title: "game", genre: "game2", releaseYear: 2000 });
 
       expect(res.status).toBe(201);
     });
@@ -19,7 +19,7 @@ describe("server.js", () => {
     it("Respond with 422 UNPROCESSABLE ENTITY", async () => {
       const res = await request(server)
         .post("/games")
-        .send({ title: "game", releaseDate: 2000 });
+        .send({ title: "game", releaseYear: 2000 });
 
       expect(res.status).toBe(422);
     });
@@ -27,13 +27,14 @@ describe("server.js", () => {
     it("Respond with 500", async () => {
       const res = await request(server)
         .post("/games")
-        .send({ title: "game", releaseDate: 2000 });
+        .send({
+          title: "game",
+          genre: "game",
+          releaseYear: 2000,
+          somethingxtra: "hi"
+        });
 
-      const res2 = await request(server)
-        .post("/games")
-        .send({ title: "game", genre: "game", releaseDate: 2000 });
-
-      expect(res2.status).toBe(500);
+      expect(res.status).toBe(500);
     });
   });
   describe("***** GET *****", () => {
@@ -46,13 +47,13 @@ describe("server.js", () => {
     it("Respond with 404 OK", async () => {
       const res = await request(server).get("/games");
 
-      expect(res.status).toBe(404);
+      expect(res.body.games).toEqual([]);
     });
 
     it("Respond with 500 OK", async () => {
       const res = await request(server).get("/games");
 
-      expect(res.status).toBe(500);
+      expect(res.body.message).toEqual("YAY");
     });
   });
 });
