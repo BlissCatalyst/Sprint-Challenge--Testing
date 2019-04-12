@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 
+const games = require("../games/gamesModel.js");
+
 const server = express();
 
 server.use(cors());
